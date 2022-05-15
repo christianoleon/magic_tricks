@@ -3,6 +3,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:android_intent_plus/flag.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -105,7 +107,9 @@ _save(int posicao) async {
   var appDocDir = await getTemporaryDirectory();
   String savePath = appDocDir.path + "/efeito-$posicao.jpg";
   debugPrint(savePath);
-  await Dio().download("urlPath", savePath);
+  await Dio().download(
+      "https://github.com/christianoleon/magic_tricks/blob/main/assets/images/teste.jpg",
+      savePath);
   print("saved!");
   final result = await ImageGallerySaver.saveFile(savePath);
   print(result);
@@ -132,5 +136,10 @@ class PhotosWidget extends StatelessWidget {
 
 void _openGallery() {
   print("abrindo a galeria");
-  // android_intent.Intent()
+  final intent = AndroidIntent(
+    action: 'action_view',
+    type: 'image/*',
+    flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
+  );
+  intent.launch();
 }
